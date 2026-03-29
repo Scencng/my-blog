@@ -1,0 +1,28 @@
+---
+// 纯 CMS 后台页面，不使用主题布局
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>博客后台管理</title>
+    <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
+    <style is:inline>
+      /* 修复 Decap CMS 登录页 Logo 被裁切的问题 */
+      div[class*="LogoContainer"], div[class*="Logo-"] {
+        height: auto !important;
+        min-height: 80px;
+        padding-bottom: 20px;
+      }
+      div[class*="LogoContainer"] img, div[class*="Logo-"] img {
+        object-fit: contain !important;
+        max-height: 80px !important;
+        width: auto !important;
+      }
+    </style>
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  </head>
+  <body>
+  </body>
+</html>
