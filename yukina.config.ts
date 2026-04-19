@@ -2,11 +2,11 @@ import I18nKeys from "./src/locales/keys";
 import type { Configuration } from "./src/types/config";
 
 const YukinaConfig: Configuration = {
-  title: "我的博客",
-  subTitle: "记录生活与技术的点滴",
-  brandTitle: "我的博客",
+  title: "Hello",
+  subTitle: "Welcome to Scencng Lv's blog",
+  brandTitle: "Scencng Lv's blog",
 
-  description: "个人博客站点",
+  description: "Blog Site",
 
   site: "https://example.com",
 
@@ -19,7 +19,7 @@ const YukinaConfig: Configuration = {
     },
     {
       nameKey: I18nKeys.nav_bar_archive,
-      href: "/archive",
+      href: "/blog",
     },
     {
       nameKey: I18nKeys.nav_bar_about,
@@ -27,17 +27,25 @@ const YukinaConfig: Configuration = {
     },
     {
       nameKey: I18nKeys.nav_bar_github,
-      href: "https://github.com/WhitePaper233/yukina",
+      href: "https://github.com/Scencng/blog",
     },
   ],
 
-  username: "博主昵称",
-  sign: "这是一段个人签名。",
+  username: "Scencng Lv",
+  sign: "Ad Astra Per Aspera",
   avatarUrl: "https://s2.loli.net/2025/01/25/FPpTrQSezM8ivbl.webp",
   socialLinks: [
     {
       icon: "line-md:github-loop",
-      link: "https://github.com",
+      link: "https://github.com/Scencng",
+    },
+    {
+      icon: "mingcute:bilibili-line",
+      link: "https://space.bilibili.com/1812595616",
+    },
+    {
+      icon: "mingcute:netease-music-line",
+      link: "https://music.163.com/#/user/home?id=426751163",
     },
   ],
   maxSidebarCategoryChip: 6, // It is recommended to set it to a common multiple of 2 and 3

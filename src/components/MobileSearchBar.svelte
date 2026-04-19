@@ -16,9 +16,8 @@
 
   let search = (keyword: string) => {};
 
-  onMount(async () => {
-    // setup overlay scrollbars
-    OverlayScrollbars(resultPannel, {
+  onMount(() => {
+    const osInstance = OverlayScrollbars(resultPannel, {
       scrollbars: {
         theme: "scrollbar-base scrollbar-auto py-1",
         autoHide: "move",
@@ -51,21 +50,26 @@
         resultPannel.style.opacity = "0";
       }
     };
-  });
 
-  // handle click outside to closed search pannel
-  document.addEventListener("click", (event) => {
-    if (
-      !resultPannel.contains(event.target as any) &&
-      !searchBar.contains(event.target as any) &&
-      !searchButton.contains(event.target as any)
-    ) {
-      searchBar.style.height = "0px";
-      searchBar.style.opacity = "0";
-      searchBarDisplay = false;
-      searchKeyword = "";
-      search("");
-    }
+    const onDocClick = (event: MouseEvent) => {
+      if (
+        !resultPannel.contains(event.target as Node) &&
+        !searchBar.contains(event.target as Node) &&
+        !searchButton.contains(event.target as Node)
+      ) {
+        searchBar.style.height = "0px";
+        searchBar.style.opacity = "0";
+        searchBarDisplay = false;
+        searchKeyword = "";
+        search("");
+      }
+    };
+    document.addEventListener("click", onDocClick);
+
+    return () => {
+      document.removeEventListener("click", onDocClick);
+      osInstance.destroy();
+    };
   });
 
   const toggleSearchBar = () => {

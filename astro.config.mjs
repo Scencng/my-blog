@@ -25,18 +25,27 @@ export default defineConfig({
     icon(),
     swup({
       theme: false,
-      containers: ["main", "footer", ".banner-inner"],
+      // Footer lives inside `<main>`; listing both made Swup replace nested containers twice.
+      containers: ["main", ".banner-inner"],
       smoothScrolling: true,
       progress: true,
       cache: true,
       preload: true,
-      updateHead: true,
+      // Avoid stripping/reordering Vite/Astro-injected stylesheets on client navigations.
+      updateHead: false,
       updateBodyClass: false,
       globalInstance: true,
+      // Prevents layout scripts from re-running each visit (duplicate listeners / OSB wraps).
+      reloadScripts: false,
     }),
     sitemap(),
     pagefind(),
   ],
+  vite: {
+    optimizeDeps: {
+      exclude: ['@swup/astro'],
+    },
+  },
   markdown: {
     shikiConfig: {
       theme: "github-dark-default",

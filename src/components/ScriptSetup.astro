@@ -6,6 +6,14 @@
   import lozad from "lozad";
   import { OverlayScrollbars } from "overlayscrollbars";
 
+  (() => {
+    /**
+     * Swup `reloadScripts` / Vite HMR can evaluate this bundle more than once.
+     * Second run must not attach duplicate hooks.
+     */
+    if (window.__yukinaScriptSetupDone) return;
+    window.__yukinaScriptSetupDone = true;
+
   // setup post url
   const setupUrlAnchor = () => {
     const url = window.location.href;
@@ -27,8 +35,8 @@
     observer.observe();
   };
 
-  // add global scroll bar
-  const setupScrollBar = () => {
+  const setupBodyScrollbars = () => {
+    if (window.__yukinaBodyOsInitialized) return;
     OverlayScrollbars(
       { target: document.body, cancel: { nativeScrollbarsOverlaid: true } },
       {
@@ -39,10 +47,14 @@
       },
     );
     document.body.classList.remove("overflow-y-hidden");
+    window.__yukinaBodyOsInitialized = true;
+  };
 
-    // add scrollbar for code blocks
-    document.querySelectorAll("pre").forEach((ele) => {
-      OverlayScrollbars(ele, {
+  /** Code blocks come from swapped `<main>` content; body wrapper persists across Swup navigations. */
+  const setupPreScrollbars = () => {
+    document.querySelectorAll("pre:not([data-osb-pre])").forEach((ele) => {
+      ele.setAttribute("data-osb-pre", "");
+      OverlayScrollbars(ele as HTMLElement, {
         scrollbars: {
           theme: "scrollbar-base scrollbar-dark px-2",
           autoHide: "leave",
@@ -53,19 +65,44 @@
     });
   };
 
-  // init
-  const setup = () => {
-    setupUrlAnchor();
-    setupLozad();
-    setupScrollBar();
+  const setupScrollBarsAll = () => {
+    setupBodyScrollbars();
+    setupPreScrollbars();
   };
 
-  document.addEventListener("DOMContentLoaded", setup);
+  const setupInitial = () => {
+    setupUrlAnchor();
+    setupLozad();
+    setupScrollBarsAll();
+  };
+
+  /** After Swup replaces content — never re-wrap `document.body`. */
+  const setupAfterPageSwap = () => {
+    setupUrlAnchor();
+    setupLozad();
+    setupPreScrollbars();
+  };
+
+  const runInitialWhenReady = () => {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", setupInitial, { once: true });
+    } else {
+      setupInitial();
+    }
+  };
+
+  runInitialWhenReady();
+
+  const attachSwupContentHook = () => {
+    window.swup?.hooks?.on("content:replace", setupAfterPageSwap);
+  };
+
   if (window.swup?.hooks) {
-    setup();
+    attachSwupContentHook();
   } else {
-    document.addEventListener("swup:enable", () => {
-      window.swup.hooks.on("content:replace", setup);
+    document.addEventListener("swup:enable", attachSwupContentHook, {
+      once: true,
     });
   }
+  })();
 </script>

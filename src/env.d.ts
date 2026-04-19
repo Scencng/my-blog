@@ -1,10 +1,15 @@
 /// <reference path="../.astro/types.d.ts" />
 /// <reference types="astro/client" />
 
-import type { AstroIntegration } from "@swup/astro";
-
 declare global {
   interface Window {
-    swup: AstroIntegration;
+    /** Swup runtime instance when `globalInstance` is enabled */
+    swup?: import("swup").default;
+    /** Guards layout ScriptSetup against Swup Scripts plugin re-runs */
+    __yukinaScriptSetupDone?: boolean;
+    /** OverlayScrollbars must only wrap `<body>` once across navigations/HMR */
+    __yukinaBodyOsInitialized?: boolean;
   }
 }
+
+export {};
