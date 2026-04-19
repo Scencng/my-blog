@@ -27,6 +27,7 @@
   // setup lazy load for images
   const setupLozad = () => {
     const observer = lozad(".lozad", {
+      rootMargin: "320px 0px 320px 0px",
       loaded: (el) => {
         el.classList.add("loaded");
       },

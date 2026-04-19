@@ -23,7 +23,12 @@ const tagKeys = [...tags.keys()];
         <img
           src={YukinaConfig.avatarUrl}
           alt="avatar"
-          class="avatar lozad select-none"
+          class="avatar select-none"
+          width={224}
+          height={224}
+          loading="eager"
+          decoding="async"
+          fetchpriority="low"
         />
       </a>
       <div class="username mt-4">

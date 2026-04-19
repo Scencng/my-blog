@@ -27,7 +27,7 @@ const YukinaConfig: Configuration = {
     },
     {
       nameKey: I18nKeys.nav_bar_github,
-      href: "https://github.com/Scencng/blog",
+      href: "https://github.com/Scencng/my-blog",
     },
   ],
 

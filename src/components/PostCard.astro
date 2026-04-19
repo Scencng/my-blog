@@ -17,10 +17,17 @@ export interface Props {
   description?: string;
   image?: string;
   readingMetadata: { time: number; wordCount: number };
+  /**
+   * Native lazy/eager — no Lozad (avoids waiting for JS after hard refresh).
+   * List pages: pass "lazy" for cards far down the page if you add larger page sizes.
+   */
+  coverLoading?: "eager" | "lazy";
 }
 
 const props = Astro.props;
+const coverLoading = props.coverLoading ?? "eager";
 const entryID = IdToSlug(props.id);
+const coverUrl = props.image ?? GetCoverURLForUnspecifiedEntry(entryID);
 const contentUrl = `/posts/${entryID}`;
 const { time, wordCount } = props.readingMetadata;
 ---
@@ -33,9 +40,14 @@ const { time, wordCount } = props.readingMetadata;
     class="relative h-[128px] transition-all hover:brightness-75 lg:hidden"
   >
     <img
-      class="lozad absolute left-0 top-0 h-full w-full rounded-t-3xl object-cover lg:hidden"
-      data-src={props.image ?? GetCoverURLForUnspecifiedEntry(entryID)}
+      class="absolute left-0 top-0 h-full w-full rounded-t-3xl object-cover lg:hidden"
+      src={coverUrl}
       alt="CoverPost"
+      loading={coverLoading}
+      decoding="async"
+      width={960}
+      height={384}
+      sizes="100vw"
     />
     <div class="absolute bottom-2 w-full">
       <div class="mx-2 flex flex-row justify-between">
@@ -147,9 +159,14 @@ const { time, wordCount } = props.readingMetadata;
       <a href={contentUrl} class="cover-wrapper">
         <Icon class="right-icon" name="cuida:caret-right-outline" size={96} />
         <img
-          class="lozad h-[212px] w-[404px] select-none rounded-r-3xl object-cover dark:brightness-90"
-          data-src={props.image ?? GetCoverURLForUnspecifiedEntry(entryID)}
+          class="h-[212px] w-[404px] select-none rounded-r-3xl object-cover dark:brightness-90"
+          src={coverUrl}
           alt="PostCover"
+          loading={coverLoading}
+          decoding="async"
+          width={404}
+          height={212}
+          sizes="404px"
         />
       </a>
     </div>
